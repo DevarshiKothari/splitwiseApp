@@ -1,11 +1,11 @@
 package migrations
 
 import (
-	"database/sql"
+	"database/sql" // Go's standard package to interact with SQL databases (like PostgreSQL, MySQL).
 	"fmt"
 )
 
-func RunMigrations(db *sql.DB) {
+func RunMigrations(db *sql.DB) { //*sql.DB is a a reference to a database connection pool provided by Go's standard library (database/sql). It represents a pool of zero or more underlying connections to our actual SQL database (like PostgreSQL). It allows our app to send SQL queries to the actual database efficiently
 	queries := []string{ // Added ON DELETE CASCADE to foreign keys to allow deletion of parent records and automatically delete child rows
 		`CREATE TABLE IF NOT EXISTS users (
 			id SERIAL PRIMARY KEY,
@@ -51,5 +51,5 @@ func RunMigrations(db *sql.DB) {
 		}
 	}
 
-	fmt.Println("✅ All migrations applied.")
+	fmt.Println("All migrations applied.")
 }
