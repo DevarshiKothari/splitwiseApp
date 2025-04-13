@@ -10,5 +10,5 @@ import (
 
 func RegisterUserRoutes(router *mux.Router, db *sql.DB) {
 	router.HandleFunc("/users/{id}", controllers.GetUserByIDHandler(db)).Methods(http.MethodGet)
-	// Later, you'll add: router.HandleFunc("/users", controllers.CreateUserHandler(db)).Methods(http.MethodPost)
+	router.HandleFunc("/user", controllers.CreateUserHandler(db)).Methods(http.MethodPost)
 }
