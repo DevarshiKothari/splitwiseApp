@@ -27,7 +27,7 @@ func main() {
 	router := mux.NewRouter()
 
 	// Adds user-related endpoints to the router
-	routes.RegisterUserRoutes(router, config.DB)
+	routes.RegisterRoutes(router, config.DB)
 
 	// 	Starts the HTTP server on port 8080
 	log.Println("Server is running at http://localhost:8080")

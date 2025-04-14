@@ -15,10 +15,10 @@ import (
 // GetUserByIDHandler handles GET /users/{id}
 func GetUserByIDHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		params := mux.Vars(r) //fetches path parameters like /users/{id}.
+		params := mux.Vars(r) //fetches path parameters like /users/{id}. // mux.Vars(r) gives you a map of URL path variables
 		idStr := params["id"]
 
-		id, err := strconv.Atoi(idStr) //Converts that id from string to integer.
+		id, err := strconv.Atoi(idStr) //Converts that id from string to integer. // Atoi stands for ASCII to Integer
 		if err != nil {
 			http.Error(w, "Invalid user ID", http.StatusBadRequest)
 			return
