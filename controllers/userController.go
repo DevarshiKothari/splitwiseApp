@@ -15,7 +15,7 @@ import (
 // GetUserByIDHandler handles GET /users/{id}
 func GetUserByIDHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
-		params := mux.Vars(r) //fetches path parameters like /users/{id}. // mux.Vars(r) gives you a map of URL path variables
+		params := mux.Vars(r) //fetches path parameters like /users/{id}, this is based on path provided for route. // mux.Vars(r) gives you a map of URL path variables
 		idStr := params["id"]
 
 		id, err := strconv.Atoi(idStr) //Converts that id from string to integer. // Atoi stands for ASCII to Integer

@@ -13,6 +13,6 @@ func RegisterRoutes(router *mux.Router, db *sql.DB) {
 	router.HandleFunc("/users/{id}", controllers.GetUserByIDHandler(db)).Methods(http.MethodGet)
 	router.HandleFunc("/groups", controllers.CreateGroupHandler(db)).Methods(http.MethodPost)
 	router.HandleFunc("/groups/{groupID}", controllers.GetGroupByIdHandler(db)).Methods(http.MethodGet)
-	router.HandleFunc("/groups/{groupID}/members", controllers.CreateGroupHandler(db)).Methods(http.MethodPost)
-	router.HandleFunc("/groups/{groupID}/members", controllers.GetGroupByIdHandler(db)).Methods(http.MethodGet)
+	router.HandleFunc("/groups/{groupID}/members", controllers.AddGroupMemberHandler(db)).Methods(http.MethodPost)
+	router.HandleFunc("/groups/{groupID}/members", controllers.GetGroupMembersHandler(db)).Methods(http.MethodGet)
 }

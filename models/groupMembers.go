@@ -11,7 +11,7 @@ type GroupMember struct {
 func AddGroupMember(db *sql.DB, groupID int, userID int) (GroupMember, error) {
 	var groupMember GroupMember
 	query := `
-		INSERT INTO group_members (groupID, userID)
+		INSERT INTO group_members (group_id, user_id)
 		VALUES ($1, $2)
 		RETURNING id, group_id, user_id;
 		`
