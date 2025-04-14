@@ -39,24 +39,26 @@ func GetGroupByIdHandler(db *sql.DB) http.HandlerFunc {
 		w.Header().Set("Content-type", "application/json")
 
 		params := mux.Vars(r)
-		idStr := params["id"]
+		idStr := params["groupID"]
+		fmt.Println("Raw ID Param:", idStr)
 
 		id, err := strconv.Atoi(idStr)
 		if err != nil {
+			http.Error(w, "Invalid ID", http.StatusBadRequest)
 			return
 		}
 
 		fetchedGroup, err := models.GetGroupByID(db, id)
 		if err != nil {
 			if err == sql.ErrNoRows {
-				http.Error(w, "User not found", http.StatusNotFound)
+				http.Error(w, "Group not found", http.StatusNotFound)
 				return
 			}
 			http.Error(w, "Server error", http.StatusInternalServerError)
 			return
 		}
 
-		w.WriteHeader(http.StatusCreated)
+		w.WriteHeader(http.StatusOK)
 		json.NewEncoder(w).Encode(fetchedGroup)
 	}
 }

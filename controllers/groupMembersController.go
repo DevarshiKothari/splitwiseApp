@@ -39,7 +39,7 @@ func GetGroupMembersHandler(db *sql.DB) http.HandlerFunc {
 		w.Header().Set("Content-type", "application/json")
 
 		params := mux.Vars(r)
-		idStr := params["id"]
+		idStr := params["groupID"]
 
 		id, err := strconv.Atoi(idStr)
 		if err != nil {

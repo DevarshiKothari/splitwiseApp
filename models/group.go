@@ -15,9 +15,9 @@ type Group struct {
 func CreateGroup(db *sql.DB, name string, createdBy int) (Group, error) {
 	var group Group
 	query := `
-		INSERT INTO groups (name, createdBy)
+		INSERT INTO groups (name, created_by)
 		VALUES ($1, $2)
-		RETURNING id, name, createdBy, created_at;
+		RETURNING id, name, created_by, created_at;
 	`
 	err := db.QueryRow(query, name, createdBy).Scan(
 		&group.ID,
@@ -35,8 +35,9 @@ func CreateGroup(db *sql.DB, name string, createdBy int) (Group, error) {
 func GetGroupByID(db *sql.DB, groupID int) (Group, error) {
 	var group Group
 	query := `
-		SELECT (groupID) from groups
-		VALUES ($1)
+		SELECT id, name, created_by, created_at
+		from groups
+		WHERE id = $1;
 	`
 	err := db.QueryRow(query, groupID).Scan(
 		&group.ID,
