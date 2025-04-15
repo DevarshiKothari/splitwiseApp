@@ -7,10 +7,10 @@ import (
 
 // User struct maps to the 'users' table
 type User struct {
-	ID        int
-	Name      string
-	Email     string
-	CreatedAt time.Time
+	ID        int       `json:"id"`
+	Name      string    `json:"name"`
+	Email     string    `json:"email"`
+	CreatedAt time.Time `json:"created_at"`
 }
 
 // CreateUser inserts a new user into the DB

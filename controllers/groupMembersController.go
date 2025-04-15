@@ -15,14 +15,25 @@ func AddGroupMemberHandler(db *sql.DB) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-type", "application/json")
 
-		var groupMember models.GroupMember
-		err := json.NewDecoder(r.Body).Decode(&groupMember)
+		// Extract groupID from URL path
+		params := mux.Vars(r)
+		groupIDStr := params["groupID"]
+		groupID, err := strconv.Atoi(groupIDStr)
 		if err != nil {
-			http.Error(w, "Invalid req payload", http.StatusBadRequest)
+			http.Error(w, "Invalid Group ID", http.StatusBadRequest)
 			return
 		}
 
-		addedGroupMember, err := models.AddGroupMember(db, groupMember.GroupID, groupMember.UserID)
+		var payload struct {
+			UserID int `json:"user_id"`
+		}
+		err = json.NewDecoder(r.Body).Decode(&payload)
+		if err != nil {
+			http.Error(w, "Invalid request payload", http.StatusBadRequest)
+			return
+		}
+
+		addedGroupMember, err := models.AddGroupMember(db, groupID, payload.UserID)
 		if err != nil {
 			fmt.Println("Error creating user:", err)
 			http.Error(w, "Internal Server Error", http.StatusInternalServerError)

@@ -17,8 +17,8 @@ type Expense struct {
 func CreateExpense(db *sql.DB, groupId int, paidBy int, description string, totalAmount float64) (Expense, error) {
 	var expense Expense
 
-	query := `INSERT INTO expenses (group_id, paid_by, description, total_amount, created_at) 
-	VALUES ($1, $2, $3, $4, $5)
+	query := `INSERT INTO expenses (group_id, paid_by, description, total_amount) 
+	VALUES ($1, $2, $3, $4)
 	RETURNING id, group_id, paid_by, description, total_amount, created_at;`
 
 	err := db.QueryRow(query, groupId, paidBy, description, totalAmount).Scan(

@@ -31,7 +31,7 @@ func RunMigrations(db *sql.DB) { //*sql.DB is a a reference to a database connec
 			id SERIAL PRIMARY KEY,
 			group_id INTEGER REFERENCES groups(id) ON DELETE CASCADE,
 			paid_by INTEGER REFERENCES users(id) ON DELETE CASCADE,
-			amount NUMERIC NOT NULL,
+			total_amount NUMERIC NOT NULL,
 			description TEXT,
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);`,
