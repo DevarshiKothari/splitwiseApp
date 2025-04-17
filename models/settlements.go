@@ -6,13 +6,7 @@ import (
 	"splitwise-app/utils"
 )
 
-type Balance struct {
-	FromUserID int
-	ToUserID   int
-	Amount     float64
-}
-
-func CalculateGroupBalances(db *sql.DB, groupID int) (map[int]float64, error) {
+func CalculateGroupBalances(db *sql.DB, groupID int) ([]utils.Balance, error) {
 	expenseRows, err := db.Query("SELECT id, paid_by, total_amount FROM expenses WHERE group_id = $1", groupID)
 	if err != nil {
 		return nil, err
@@ -38,7 +32,7 @@ func CalculateGroupBalances(db *sql.DB, groupID int) (map[int]float64, error) {
 	}
 
 	if len(expenseIDs) == 0 {
-		return map[int]float64{}, nil
+		return []utils.Balance{}, nil // [] is not a valid way to return empty slice in Go so []Balance{}
 	}
 
 	// Fetch all splits for these expenses
@@ -89,5 +83,5 @@ func CalculateGroupBalances(db *sql.DB, groupID int) (map[int]float64, error) {
 		}
 	}
 
-	return utils.MapTransformationFunc()(balances), nil
+	return utils.MapTransformationFunc(balances), nil
 }
