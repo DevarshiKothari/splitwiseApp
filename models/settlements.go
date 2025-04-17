@@ -83,5 +83,5 @@ func CalculateGroupBalances(db *sql.DB, groupID int) ([]utils.Balance, error) {
 		}
 	}
 
-	return utils.MapTransformationFunc(balances), nil
+	return utils.SimplifyBalances(balances), nil
 }
