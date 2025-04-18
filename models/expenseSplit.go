@@ -1,6 +1,9 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+)
 
 type ExpenseSplit struct {
 	ID        int     `json:"id"`
@@ -24,6 +27,19 @@ func CreateExpenseSplit(db *sql.DB, expenseID int, userID int, amount float64) (
 	)
 	if err != nil {
 		return ExpenseSplit{}, err
+	}
+
+	// Fetch group_id from expenses table
+	var groupID int
+	err = db.QueryRow("SELECT group_id FROM expenses WHERE id = $1", expenseID).Scan(&groupID)
+	if err != nil {
+		fmt.Println("Failed to fetch group ID for activity log:", err)
+	}
+
+	description := fmt.Sprintf("Expense split of %f added by user %d for expense %d in group %d", amount, userID, expenseID, groupID)
+	err = CreateActivity(db, groupID, userID, "expense_split_created", description)
+	if err != nil {
+		fmt.Println("Activity logging failed for expense split creation:", err)
 	}
 
 	return expenseSplit, nil

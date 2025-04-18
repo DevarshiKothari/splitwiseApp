@@ -1,6 +1,9 @@
 package models
 
-import "database/sql"
+import (
+	"database/sql"
+	"fmt"
+)
 
 type GroupMember struct {
 	ID      int `json:"id"`
@@ -24,6 +27,12 @@ func AddGroupMember(db *sql.DB, groupID int, userID int) (GroupMember, error) {
 	if err != nil {
 		// fmt.Printf()
 		return GroupMember{}, err
+	}
+
+	msg := fmt.Sprintf("User %d added to group %d", userID, groupID)
+	err = CreateActivity(db, groupID, userID, "member_added", msg)
+	if err != nil {
+		fmt.Println("Activity logging failed for member addition:", err)
 	}
 
 	return groupMember, nil

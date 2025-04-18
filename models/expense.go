@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 )
 
@@ -31,6 +32,12 @@ func CreateExpense(db *sql.DB, groupId int, paidBy int, description string, tota
 	)
 	if err != nil {
 		return Expense{}, err
+	}
+
+	msg := fmt.Sprintf("%s Expense added by %d in %d", description, paidBy, groupId)
+	err = CreateActivity(db, groupId, paidBy, "expense_created", msg)
+	if err != nil {
+		fmt.Println("Activity logging failed for expense creation:", err)
 	}
 
 	return expense, nil

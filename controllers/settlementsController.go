@@ -30,7 +30,7 @@ func AddSettlement(db *sql.DB) http.HandlerFunc {
 			return
 		}
 
-		err = models.SaveSettlementsToDB(db, groupID, req)
+		err = models.AddSettlementsToDB(db, groupID, req)
 		if err != nil {
 			http.Error(w, "Failed to record settlement", http.StatusInternalServerError)
 			return

@@ -2,6 +2,7 @@ package models
 
 import (
 	"database/sql"
+	"fmt"
 	"time"
 )
 
@@ -27,6 +28,12 @@ func CreateGroup(db *sql.DB, name string, createdBy int) (Group, error) {
 	)
 	if err != nil {
 		return Group{}, err
+	}
+
+	msg := fmt.Sprintf("New group : %s created by %d", name, createdBy)
+	err = CreateActivity(db, group.ID, createdBy, "group_created", msg)
+	if err != nil {
+		fmt.Println("Activity logging failed for group creation:", err)
 	}
 
 	return group, nil

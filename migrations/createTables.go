@@ -51,6 +51,14 @@ func RunMigrations(db *sql.DB) { //*sql.DB is a a reference to a database connec
 			amount NUMERIC(10,2) NOT NULL CHECK (amount > 0),
 			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 		);`,
+		`CREATE TABLE IF NOT EXISTS activities (
+			id SERIAL PRIMARY KEY,
+			group_id INT NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
+			user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE, -- who performed the action
+			activity_type TEXT NOT NULL, -- "expense_added", "split_added", "settlement", "member_added"
+			description TEXT NOT NULL,   -- human-readable description like "Riya was added to the group"
+			created_at TIMESTAMP DEFAULT NOW()
+		);`,
 	}
 
 	for _, query := range queries {
