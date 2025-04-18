@@ -42,6 +42,15 @@ func RunMigrations(db *sql.DB) { //*sql.DB is a a reference to a database connec
 			user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
 			amount NUMERIC NOT NULL
 		);`,
+
+		`CREATE TABLE IF NOT EXISTS settlements (
+			id SERIAL PRIMARY KEY,
+			group_id INTEGER NOT NULL REFERENCES groups(id),
+			from_user_id INTEGER NOT NULL REFERENCES users(id),
+			to_user_id INTEGER NOT NULL REFERENCES users(id),
+			amount NUMERIC(10,2) NOT NULL CHECK (amount > 0),
+			created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+		);`,
 	}
 
 	for _, query := range queries {
