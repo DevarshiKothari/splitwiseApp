@@ -12,6 +12,24 @@ type GroupMember struct {
 }
 
 func AddGroupMember(db *sql.DB, groupID int, userID int) (GroupMember, error) {
+	// Check if user is already a member of the group
+	var exists bool
+	checkQuery := `
+		SELECT EXISTS (
+			SELECT 1 FROM group_members 
+			WHERE group_id = $1 AND user_id = $2
+		);
+	`
+
+	err := db.QueryRow(checkQuery, groupID, userID).Scan(&exists)
+	if err != nil {
+		return GroupMember{}, fmt.Errorf("failed to check membership: %w", err)
+	}
+
+	if exists {
+		return GroupMember{}, fmt.Errorf("user %d is already a member of group %d", userID, groupID)
+	}
+
 	var groupMember GroupMember
 	query := `
 		INSERT INTO group_members (group_id, user_id)
@@ -19,7 +37,7 @@ func AddGroupMember(db *sql.DB, groupID int, userID int) (GroupMember, error) {
 		RETURNING id, group_id, user_id;
 		`
 
-	err := db.QueryRow(query, groupID, userID).Scan(
+	err = db.QueryRow(query, groupID, userID).Scan(
 		&groupMember.ID,
 		&groupMember.GroupID,
 		&groupMember.UserID,

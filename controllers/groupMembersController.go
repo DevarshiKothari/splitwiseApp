@@ -3,7 +3,6 @@ package controllers
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"splitwise-app/models"
 	"strconv"
@@ -35,8 +34,7 @@ func AddGroupMemberHandler(db *sql.DB) http.HandlerFunc {
 
 		addedGroupMember, err := models.AddGroupMember(db, groupID, payload.UserID)
 		if err != nil {
-			fmt.Println("Error creating user:", err)
-			http.Error(w, "Internal Server Error", http.StatusInternalServerError)
+			http.Error(w, "Internal Server Error : "+err.Error(), http.StatusInternalServerError)
 			return
 		}
 
